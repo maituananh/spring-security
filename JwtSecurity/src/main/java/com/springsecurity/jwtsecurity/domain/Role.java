@@ -16,29 +16,17 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @Setter
-@Table(name = "USERS")
+@Builder
+@Table(name = "Roles")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class User {
+public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false)
-    private String passwordHash;
-
     @Column
-    private Boolean enable;
-
-    public User(final String username, final String passwordHash, final String roles, final String permissions) {
-        this.username = username;
-        this.passwordHash = passwordHash;
-        this.enable = true;
-    }
+    private String name;
 }

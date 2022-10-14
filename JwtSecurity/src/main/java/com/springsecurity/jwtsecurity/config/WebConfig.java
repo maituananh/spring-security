@@ -9,6 +9,11 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class WebConfig {
 
+//    @Bean
+//    public JwtParser jwtParser() {
+//        return Jwts.parser().setSigningKey()
+//    }
+
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

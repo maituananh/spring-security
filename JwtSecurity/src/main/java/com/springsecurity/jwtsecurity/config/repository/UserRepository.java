@@ -1,4 +1,4 @@
-package com.springsecurity.jwtsecurity.repository;
+package com.springsecurity.jwtsecurity.config.repository;
 
 import com.springsecurity.jwtsecurity.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

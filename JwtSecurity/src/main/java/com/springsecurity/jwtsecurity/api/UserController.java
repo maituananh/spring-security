@@ -1,8 +1,10 @@
 package com.springsecurity.jwtsecurity.api;
 
-import com.springsecurity.jwtsecurity.domain.User;
-import com.springsecurity.jwtsecurity.dto.UserCreate;
-import com.springsecurity.jwtsecurity.dto.UserUpdate;
+import com.springsecurity.jwtsecurity.bloc.UserBloc;
+import com.springsecurity.jwtsecurity.dto.request.user.UserCreateReq;
+import com.springsecurity.jwtsecurity.dto.request.user.UserUpdateReq;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,29 +14,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.http.HttpResponse;
-
 @RestController
-@RequestMapping("api/v1/users")
-public class UserController {
+@RequestMapping("api/users")
+@AllArgsConstructor
+public class UserController extends BaseController {
+
+    private UserBloc userBloc;
 
     @GetMapping("/all")
-    public HttpResponse<User> fetchAll() {
-        return null;
+    public ResponseEntity<?> fetchAll() {
+        return ok(userBloc.fetchAllUser());
     }
 
     @PostMapping("/")
-    public HttpResponse<User> store(@RequestBody final UserCreate userCreate) {
+    public ResponseEntity<?> store(@RequestBody final UserCreateReq userCreateReq) {
         return null;
     }
 
     @PutMapping("/")
-    public HttpResponse<User> update(@RequestBody final UserUpdate userUpdate) {
+    public ResponseEntity<?> update(@RequestBody final UserUpdateReq userUpdateReq) {
         return null;
     }
 
     @DeleteMapping("/{id}")
-    public HttpResponse<User> delete(@PathVariable final String id) {
+    public ResponseEntity<?> delete(@PathVariable final String id) {
         return null;
     }
 }

@@ -1,7 +1,12 @@
 package com.springsecurity.jwtsecurity.config;
 
+import com.springsecurity.jwtsecurity.security.DomainUserDetailsService;
+import com.springsecurity.jwtsecurity.security.SecurityConfigAdapter;
+import com.springsecurity.jwtsecurity.security.jwt.JwtFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,16 +24,35 @@ public class WebSecurityConfig
     extends WebSecurityConfigurerAdapter {
 
     private CorsFilter corsFilter;
+    private JwtFilter jwtAuthenticationFilter;
+    private DomainUserDetailsService domainUserDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public SecurityConfigAdapter securityConfigAdapter() {
+        return new SecurityConfigAdapter(jwtAuthenticationFilter);
+    }
+
     @Override
     public void configure(final WebSecurity web)
         throws Exception {
 //        web.ignoring().
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(domainUserDetailsService)
+            .passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
@@ -51,8 +75,10 @@ public class WebSecurityConfig
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
+            .antMatchers("/api/token/login").permitAll()
             .antMatchers("/api/**").authenticated()
-            .and();
-//            .apply(securityConfigurerAdapter());
+            .and()
+            .apply(securityConfigAdapter());
+//            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
