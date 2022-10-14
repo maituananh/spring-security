@@ -1,6 +1,6 @@
 package com.springsecurity.jwtsecurity.service;
 
-import com.springsecurity.jwtsecurity.config.repository.UserRolePermissionRepository;
+import com.springsecurity.jwtsecurity.repository.UserRolePermissionRepository;
 import com.springsecurity.jwtsecurity.domain.UserRolePermission;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

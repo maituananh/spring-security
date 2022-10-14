@@ -5,6 +5,7 @@ import com.springsecurity.jwtsecurity.dto.request.user.UserCreateReq;
 import com.springsecurity.jwtsecurity.dto.request.user.UserUpdateReq;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ public class UserController extends BaseController {
 
     private UserBloc userBloc;
 
+    @PreAuthorize("hasRole('ADMIN') and hasAuthority('READ')")
     @GetMapping("/all")
     public ResponseEntity<?> fetchAll() {
         return ok(userBloc.fetchAllUser());

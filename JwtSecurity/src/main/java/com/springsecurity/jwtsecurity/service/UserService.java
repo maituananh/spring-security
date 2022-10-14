@@ -1,7 +1,7 @@
 package com.springsecurity.jwtsecurity.service;
 
 import com.springsecurity.jwtsecurity.domain.User;
-import com.springsecurity.jwtsecurity.config.repository.UserRepository;
+import com.springsecurity.jwtsecurity.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

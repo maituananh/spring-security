@@ -115,8 +115,8 @@ public class TokenProvider {
         Collection<SimpleGrantedAuthority> roles = new HashSet<>(roleSet.size());
         Collection<SimpleGrantedAuthority> permissions = new HashSet<>(permissionSet.size());
 
-        roleSet.forEach(role -> roles.add(new SimpleGrantedAuthority(role)));
-        permissionSet.forEach(permission -> permissions.add(new SimpleGrantedAuthority(permission)));
+        roleSet.forEach(role -> roles.add(new SimpleGrantedAuthority(role.toUpperCase())));
+        permissionSet.forEach(permission -> permissions.add(new SimpleGrantedAuthority(permission.toUpperCase())));
 
         Long userId = Long.parseLong(claims.get(USER_ID_KEY).toString());
         String username = claims.get(USERNAME_KEY).toString();
@@ -128,12 +128,21 @@ public class TokenProvider {
                                                                .authorities(permissions)
                                                                .build();
 
-        return new UsernamePasswordAuthenticationToken(domainUserDetails, token, permissions);
+        return new UsernamePasswordAuthenticationToken(domainUserDetails, token, collectRolesAndPermissions(roles, permissions));
     }
 
     public Set<String> toSetString(final Collection<? extends GrantedAuthority> authorities) {
         return authorities.stream()
                           .map(role -> new SimpleGrantedAuthority(role.getAuthority()).getAuthority())
                           .collect(Collectors.toSet());
+    }
+
+    private Collection<SimpleGrantedAuthority> collectRolesAndPermissions(Collection<SimpleGrantedAuthority> roles,
+                                                                          Collection<SimpleGrantedAuthority> permissions) {
+        Collection<SimpleGrantedAuthority> roleAndPermission = new HashSet<>(roles.size() + permissions.size());
+        roleAndPermission.addAll(roles);
+        roleAndPermission.addAll(permissions);
+
+        return roleAndPermission;
     }
 }

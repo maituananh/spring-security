@@ -11,8 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -22,7 +20,7 @@ public class AuthBloc {
     private AuthenticationManager authenticationManager;
     private TokenProvider tokenProvider;
 
-    public TokenRes login(final LoginReq req) throws ParseException {
+    public TokenRes login(final LoginReq req) {
         // check login
         var domainUserDetails = authenticate(req.getUsername(), req.getPassword());
         // create token
