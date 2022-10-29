@@ -13,8 +13,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -34,19 +33,6 @@ public class DatabaseInit implements CommandLineRunner {
         this.permissionRepository.deleteAll();
         this.userRolePermissionRepository.deleteAll();
 
-        // Crete users
-        User userAdmin = User.builder()
-                             .username("admin")
-                             .passwordHash(passwordEncoder.encode("admin"))
-                             .build();
-        User user = User.builder()
-                        .username("user")
-                        .passwordHash(passwordEncoder.encode("user"))
-                        .build();
-
-        userAdmin = this.userRepository.save(userAdmin);
-        user = this.userRepository.save(user);
-
         // Create role
         Role roleAdmin = Role.builder().name("ROLE_ADMIN").build();
         Role roleUser = Role.builder().name("ROLE_USER").build();
@@ -57,53 +43,61 @@ public class DatabaseInit implements CommandLineRunner {
         // Create Permission
         Permission readPermission = Permission.builder().name("READ").build();
         Permission writePermission = Permission.builder().name("WRITE").build();
-        Permission createPermission = Permission.builder().name("CREATE").build();
         Permission deletePermission = Permission.builder().name("DELETE").build();
 
         readPermission = this.permissionRepository.save(readPermission);
         writePermission = this.permissionRepository.save(writePermission);
-        createPermission = this.permissionRepository.save(createPermission);
         deletePermission = this.permissionRepository.save(deletePermission);
 
         // Create User Role Permission
         UserRolePermission userRolePermission1 = UserRolePermission.builder()
-                                                                   .userId(userAdmin.getId())
-                                                                   .roleId(roleAdmin.getId())
-                                                                   .permissionId(readPermission.getId())
+                                                                   .role(roleAdmin)
+                                                                   .permission(readPermission)
                                                                    .build();
         UserRolePermission userRolePermission2 = UserRolePermission.builder()
-                                                                   .userId(userAdmin.getId())
-                                                                   .roleId(roleAdmin.getId())
-                                                                   .permissionId(writePermission.getId())
+                                                                   .role(roleAdmin)
+                                                                   .permission(writePermission)
                                                                    .build();
         UserRolePermission userRolePermission3 = UserRolePermission.builder()
-                                                                   .userId(userAdmin.getId())
-                                                                   .roleId(roleAdmin.getId())
-                                                                   .permissionId(createPermission.getId())
-                                                                   .build();
-        UserRolePermission userRolePermission4 = UserRolePermission.builder()
-                                                                   .userId(userAdmin.getId())
-                                                                   .roleId(roleAdmin.getId())
-                                                                   .permissionId(deletePermission.getId())
+                                                                   .role(roleAdmin)
+                                                                   .permission(deletePermission)
                                                                    .build();
 
         UserRolePermission userRolePermission5 = UserRolePermission.builder()
-                                                                   .userId(user.getId())
-                                                                   .roleId(roleUser.getId())
-                                                                   .permissionId(readPermission.getId())
+                                                                   .role(roleUser)
+                                                                   .permission(deletePermission)
                                                                    .build();
         UserRolePermission userRolePermission6 = UserRolePermission.builder()
-                                                                   .userId(user.getId())
-                                                                   .roleId(roleUser.getId())
-                                                                   .permissionId(writePermission.getId())
+                                                                   .role(roleUser)
+                                                                   .permission(writePermission)
+                                                                   .build();
+        UserRolePermission userRolePermission7 = UserRolePermission.builder()
+                                                                   .role(roleUser)
+                                                                   .permission(readPermission)
                                                                    .build();
 
-        List<UserRolePermission> userRolePermissions = Arrays.asList(userRolePermission1,
-                                                                     userRolePermission2,
-                                                                     userRolePermission3,
-                                                                     userRolePermission4,
-                                                                     userRolePermission5,
-                                                                     userRolePermission6);
-        this.userRolePermissionRepository.saveAll(userRolePermissions);
+        Set<UserRolePermission> userRolePermissionUser = Set.of(userRolePermission5, userRolePermission6, userRolePermission7);
+        Set<UserRolePermission> userRolePermissionAdmin = Set.of(userRolePermission1, userRolePermission2, userRolePermission3);
+
+        // Crete users
+        User userAdmin = User.builder()
+                             .username("admin")
+                             .passwordHash(passwordEncoder.encode("admin"))
+                             .userRolePermissions(userRolePermissionAdmin)
+                             .enable(true)
+                             .build();
+
+        User user = User.builder()
+                        .username("user")
+                        .passwordHash(passwordEncoder.encode("user"))
+                        .userRolePermissions(userRolePermissionUser)
+                        .enable(true)
+                        .build();
+
+        userRolePermissionAdmin.forEach(urp -> urp.setUser(userAdmin));
+        userRolePermissionUser.forEach(urp -> urp.setUser(user));
+
+        this.userRepository.save(userAdmin);
+        this.userRepository.save(user);
     }
 }

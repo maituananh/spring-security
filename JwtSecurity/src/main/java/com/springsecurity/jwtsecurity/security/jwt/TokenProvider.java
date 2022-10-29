@@ -137,8 +137,8 @@ public class TokenProvider {
                           .collect(Collectors.toSet());
     }
 
-    private Collection<SimpleGrantedAuthority> collectRolesAndPermissions(Collection<SimpleGrantedAuthority> roles,
-                                                                          Collection<SimpleGrantedAuthority> permissions) {
+    private Collection<SimpleGrantedAuthority> collectRolesAndPermissions(final Collection<SimpleGrantedAuthority> roles,
+                                                                          final Collection<SimpleGrantedAuthority> permissions) {
         Collection<SimpleGrantedAuthority> roleAndPermission = new HashSet<>(roles.size() + permissions.size());
         roleAndPermission.addAll(roles);
         roleAndPermission.addAll(permissions);

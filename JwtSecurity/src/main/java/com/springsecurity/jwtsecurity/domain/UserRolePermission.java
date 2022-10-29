@@ -11,8 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Getter
@@ -28,24 +29,15 @@ public class UserRolePermission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "USER_ID")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
-    @Column(name = "ROLE_ID")
-    private Long roleId;
+    @ManyToOne
+    @JoinColumn(name = "ROLE_ID")
+    private Role role;
 
-    @Column(name = "PERMISSION_ID")
-    private Long permissionId;
-
-    @Transient
-    private String roleName;
-
-    @Transient
-    private String permissionName;
-
-    public UserRolePermission(Long id, String roleName, String permissionName) {
-        this.id = id;
-        this.roleName = roleName;
-        this.permissionName = permissionName;
-    }
+    @ManyToOne
+    @JoinColumn(name = "PERMISSION_ID")
+    private Permission permission;
 }

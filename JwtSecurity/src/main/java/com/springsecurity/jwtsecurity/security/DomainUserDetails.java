@@ -20,6 +20,7 @@ public class DomainUserDetails implements UserDetails {
     private Long id;
     private String username;
     private String password;
+    private boolean enabled;
     private Collection<? extends GrantedAuthority> roles;
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -55,6 +56,6 @@ public class DomainUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

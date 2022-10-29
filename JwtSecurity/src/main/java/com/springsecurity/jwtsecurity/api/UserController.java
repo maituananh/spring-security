@@ -3,6 +3,7 @@ package com.springsecurity.jwtsecurity.api;
 import com.springsecurity.jwtsecurity.bloc.UserBloc;
 import com.springsecurity.jwtsecurity.dto.request.user.UserCreateReq;
 import com.springsecurity.jwtsecurity.dto.request.user.UserUpdateReq;
+import com.springsecurity.jwtsecurity.exception.ValidatorException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("api/users")
 @AllArgsConstructor
@@ -22,24 +25,29 @@ public class UserController extends BaseController {
 
     private UserBloc userBloc;
 
-    @PreAuthorize("hasRole('ADMIN') and hasAuthority('READ')")
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN') and hasAuthority('READ')")
     public ResponseEntity<?> fetchAll() {
         return ok(userBloc.fetchAllUser());
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> store(@RequestBody final UserCreateReq userCreateReq) {
-        return null;
+    @PreAuthorize("hasRole('ADMIN') and hasAuthority('WRITE')")
+    public ResponseEntity<?> store(@RequestBody @Valid final UserCreateReq userCreateReq) throws ValidatorException {
+        return create(userBloc.createUser(userCreateReq));
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> update(@RequestBody final UserUpdateReq userUpdateReq) {
-        return null;
+    @PreAuthorize("hasRole('ADMIN') and hasAuthority('WRITE')")
+    public ResponseEntity<?> update(@RequestBody @Valid final UserUpdateReq userUpdateReq) throws ValidatorException {
+        userBloc.updateUser(userUpdateReq);
+        return noContent();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable final String id) {
-        return null;
+    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN') and hasAuthority('DELETE')")
+    public ResponseEntity<?> delete(@PathVariable Long userId) {
+        userBloc.deleteUser(userId);
+        return noContent();
     }
 }

@@ -36,12 +36,12 @@ public class DomainUserDetailsService
         List<UserRolePermission> userRolePermissions = userRolePermissionService.fetchByUserId(user.getId());
 
         Set<GrantedAuthority> roles = userRolePermissions.stream()
-                                                         .map(UserRolePermission::getRoleName)
+                                                         .map(userRolePermission -> userRolePermission.getRole().getName())
                                                          .map(SimpleGrantedAuthority::new)
                                                          .collect(Collectors.toSet());
 
         Set<GrantedAuthority> permissions = userRolePermissions.stream()
-                                                               .map(UserRolePermission::getPermissionName)
+                                                               .map(userRolePermission -> userRolePermission.getPermission().getName())
                                                                .map(SimpleGrantedAuthority::new)
                                                                .collect(Collectors.toSet());
 
@@ -51,6 +51,7 @@ public class DomainUserDetailsService
                                 .password(user.getPasswordHash())
                                 .roles(roles)
                                 .authorities(permissions)
+                                .enabled(user.getEnable())
                                 .build();
     }
 }

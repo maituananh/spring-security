@@ -6,12 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,18 +31,15 @@ public class User {
     @Column
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(name = "PASSWORD_HASH", nullable = false)
     private String passwordHash;
 
-    @Column
+    @Column(nullable = false)
     private Boolean enable;
 
-    public User(final String username, final String passwordHash, final String roles, final String permissions) {
-        this.username = username;
-        this.passwordHash = passwordHash;
-        this.enable = true;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserRolePermission> userRolePermissions;
 }
