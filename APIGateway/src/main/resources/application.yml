@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: ${SERVER_NAME:api-gateway}
+  cloud:
+    gateway:
+      routes:
+      - id: productModule
+        uri: lb://PRODUCT-SERVICE
+        predicates:
+          - Path=/product-service/api/products/**
+
+#      - id: userModule
+#        uri: http://localhost:8081/
+#        predicates:
+#        - Path=/users/**
+
+server:
+  port: 8888
+
+eureka:
+  instance:
+    hostname: ${HOST:localhost}
+    preferIpAddress: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      default-zone: http://localhost:8761/eureka

@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ${SERVER_NAME:eureka-server}
+
+server:
+  port: ${POST:8761}
+
+eureka:
+  instance:
+    hostname: ${HOST:localhost}
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      default-zone: http://localhost:8761/eureka

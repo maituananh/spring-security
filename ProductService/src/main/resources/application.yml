@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ${SERVER_NAME:product-service}
+
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: /product-service
+eureka:
+  instance:
+    hostname: ${HOST:localhost}
+    preferIpAddress: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      default-zone: http://localhost:8761/eureka
