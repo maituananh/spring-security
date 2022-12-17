@@ -1,11 +1,21 @@
 spring:
   application:
     name: ${SERVER_NAME:product-service}
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: -1
+      retries: 1
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
 server:
-  port: ${PORT:8080}
+  port: 8082
   servlet:
     context-path: /product-service
+
 eureka:
   instance:
     hostname: ${HOST:localhost}

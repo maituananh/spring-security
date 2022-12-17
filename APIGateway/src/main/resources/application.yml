@@ -1,19 +1,19 @@
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: productModule
+#          uri: lb://PRODUCT-SERVICE
+#          predicates:
+#            - Path=/product-service/api/products/**
+#          filters:
+#            - APIGatewayFilter
+          #      - id: userModule
+          #        uri: http://localhost:8081/
+          #        predicates:
+          #        - Path=/users/**
 spring:
   application:
-    name: ${SERVER_NAME:api-gateway}
-  cloud:
-    gateway:
-      routes:
-      - id: productModule
-        uri: lb://PRODUCT-SERVICE
-        predicates:
-          - Path=/product-service/api/products/**
-
-#      - id: userModule
-#        uri: http://localhost:8081/
-#        predicates:
-#        - Path=/users/**
-
+    name: ${SERVER_NAME:gateway-service}
 server:
   port: 8888
 
