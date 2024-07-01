@@ -13,7 +13,7 @@
     <groupId>com.springsecurity</groupId>
     <artifactId>JwtSecurity</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>JwtSecurity</name>
     <description>JwtSecurity</description>
 
