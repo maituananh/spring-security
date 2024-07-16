@@ -1,0 +1,33 @@
+version: '3.1'
+services:
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./conf-mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_USER: r00t
+      MYSQL_DATABASE: spring_security
+
+  app-backend:
+    image: app-backend
+    restart: always
+    ports:
+      - 8888:8888
+    build:
+      context: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql/spring_security?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: r00t
+      SPRING_DATASOURCE_PASSWORD: root
+
+volumes:
+  mysql-data:
