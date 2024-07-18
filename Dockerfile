@@ -1,4 +1,4 @@
-FROM gradle:jdk21-jammy
+FROM public.ecr.aws/docker/library/gradle:jdk17-jammy
 
 COPY --chown=gradle:gradle . /home/gradle/src
 

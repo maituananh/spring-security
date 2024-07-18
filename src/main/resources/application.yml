@@ -1,15 +1,21 @@
+server:
+  port : 8888
+
 spring:
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: false
     generate-ddl: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
-      hibernate.format_sql: false
+      hibernate:
+        format_sql: false
     database: mysql
   datasource:
+    hikari:
+      allow-pool-suspension: true
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/spring_security?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${AWS_CLOUD_MAP_SERVICE_NAME:localhost}:3306/spring_security?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
     username: r00t
     password: root
