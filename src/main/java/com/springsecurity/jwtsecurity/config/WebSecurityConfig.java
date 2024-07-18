@@ -76,6 +76,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(antMatcher(HttpMethod.POST, "/api/token/login")).permitAll();
                     auth.requestMatchers(
+                            "/api/hello-world",
                             "/api/v1/auth/**",
                             "/v3/api-docs/**",
                             "/v3/api-docs.yaml",
